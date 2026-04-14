@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оптика – Интерактивті модель</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <nav class="nav">
+            <a href="anyqtama.html">Анықтама</a>
+            <a href="chat_bot.html">Чат-бот</a>
+        </nav>
+
+        <div class="header">
+            <h1><span class="grad">VIZIOPTIKA</span> <span class="plain"></span></h1>
+            <p>Линза · Айна · Интерактивті модель</p>
+        </div>
+
+        <!-- Type Selector -->
+        <div class="type-selector">
+            <div class="type-card active" id="card-lens" onclick="selectType('lens')">
+                <div class="type-icon">
+                    <svg width="54" height="72" viewBox="0 0 54 72">
+                        <defs>
+                            <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#93c5fd" />
+                                <stop offset="100%" style="stop-color:#2563eb" />
+                            </linearGradient>
+                        </defs>
+                        <ellipse cx="27" cy="36" rx="13" ry="28" fill="url(#lg)" stroke="#2563eb" stroke-width="1.5"
+                            opacity=".85" />
+                        <ellipse cx="27" cy="36" rx="13" ry="28" fill="none" stroke="#bfdbfe" stroke-width="1"
+                            opacity=".4" />
+                        <line x1="27" y1="4" x2="27" y2="68" stroke="#93c5fd" stroke-width="1" stroke-dasharray="3,3"
+                            opacity=".5" />
+                    </svg>
+                </div>
+                <div class="type-info">
+                    <h3>Линза</h3>
+                </div>
+            </div>
+            <div class="type-card" id="card-mirror" onclick="selectType('mirror')">
+                <div class="type-icon">
+                    <svg width="54" height="72" viewBox="0 0 54 72">
+                        <defs>
+                            <linearGradient id="mg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#94a3b8" />
+                                <stop offset="100%" style="stop-color:#475569" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M38 6 Q52 36 38 66" stroke="url(#mg)" stroke-width="8" fill="none"
+                            stroke-linecap="round" />
+                        <path d="M38 6 Q52 36 38 66" stroke="#cbd5e1" stroke-width="2" fill="none"
+                            stroke-linecap="round" opacity=".6" />
+                    </svg>
+                </div>
+                <div class="type-info">
+                    <h3>Айна</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subtype -->
+        <div class="subtype-row">
+            <button class="sub-btn active" id="sub1" onclick="selectSub(0)">Жинақтаушы (+)</button>
+            <button class="sub-btn" id="sub2" onclick="selectSub(1)">Шашыратушы (−)</button>
+        </div>
+
+        <!-- Formula — dynamic, updated by JS -->
+        <div class="formula-card" id="formula-card">
+            <div class="formula-title">Формула — <span id="formula-note"></span></div>
+            <div class="formula-body" id="formula-body">
+                <!-- filled by updateFormula() -->
+            </div>
+        </div>
+
+        <!-- Descriptions -->
+        <div class="desc-grid">
+            <div class="desc-item">
+                <div class="desc-sym">d</div>
+                <div class="desc-text">Заттан линзаға (айнаға) дейінгі арақашықтық</div>
+            </div>
+            <div class="desc-item">
+                <div class="desc-sym">f</div>
+                <div class="desc-text">Фокустық арақашықтық — линза ортасынан фокус нүктесіне дейін</div>
+            </div>
+            <div class="desc-item">
+                <div class="desc-sym">F</div>
+                <div class="desc-text">Кескіннен линзаға (айнаға) дейінгі арақашықтық</div>
+            </div>
+            <div class="desc-item">
+                <div class="desc-sym">Г</div>
+                <div class="desc-text">Бейненің үлкейту коэффициенті (Г = F / d)</div>
+            </div>
+        </div>
+
+        <!-- Inputs -->
+        <div class="inputs-grid">
+            <div class="input-group">
+                <label>d (см)</label>
+                <input type="number" id="inp-d" placeholder="мысалы: 20">
+            </div>
+            <div class="input-group">
+                <label>f (см)</label>
+                <input type="number" id="inp-f" placeholder="мысалы: 10">
+            </div>
+            <div class="input-group">
+                <label>F (см)</label>
+                <input type="number" id="inp-F" placeholder="мысалы: 20">
+            </div>
+            <div class="input-group">
+                <label>Г</label>
+                <input type="number" id="inp-G" placeholder="мысалы: 1.5">
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-row">
+            <button class="calc-btn" onclick="solve()">⟶ Есептеу</button>
+            <button class="clear-btn" onclick="clearAll()" title="Барлығын тазарту">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14H6L5 6" />
+                    <path d="M10 11v6" />
+                    <path d="M14 11v6" />
+                    <path d="M9 6V4h6v2" />
+                </svg>
+                Тазарту
+            </button>
+        </div>
+
+        <p class="error-msg" id="error-msg"></p>
+        <div class="result-chips" id="result-chips"></div>
+
+        <!-- Canvas -->
+        <div class="canvas-wrap">
+            <canvas id="canvas"></canvas>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-line" style="background:#059669"></div> Зат
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line" style="background:#dc2626"></div> Кескін
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dash" style="border-color:#f97316"></div> Параллель сәуле
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dash" style="border-color:#7c3aed"></div> Орталық сәуле
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dash" style="border-color:#059669"></div> Фокустық сәуле
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background:#d97706"></div> Фокус нүктесі
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">ФИЗИКА + IT · Интерактивті модель · v2</div>
+    </div>
+
+    <script>
+        /* ─── STATE ──────────────────────────────────────────────────────────────── */
+        let currentType = 'lens';
+        let currentSub = 0;
+
+        /* ─── MATH SVG HELPERS ───────────────────────────────────────────────────── */
+        // Builds a fraction as inline SVG: numerator / denominator
+        function frac(num, den, color = '#2563eb') {
+            const W = 36, H = 44, lineY = 22;
+            return `<svg viewBox="0 0 ${W} ${H}" height="44" style="vertical-align:middle;overflow:visible">
+    <text x="${W / 2}" y="${lineY - 5}" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="${color}">${num}</text>
+    <line x1="2" y1="${lineY}" x2="${W - 2}" y2="${lineY}" stroke="${color}" stroke-width="1.3"/>
+    <text x="${W / 2}" y="${lineY + 14}" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="${color}">${den}</text>
+  </svg>`;
+        }
+
+        function sym(t, color = '#2563eb', size = 14) {
+            const w = t.length * 9 + 4;
+            return `<svg viewBox="0 0 ${w} 20" height="20" style="vertical-align:middle;overflow:visible">
+    <text x="${w / 2}" y="14" text-anchor="middle" font-size="${size}" font-family="Georgia,serif" fill="${color}" font-style="italic">${t}</text>
+  </svg>`;
+        }
+
+        function op(t, color = '#64748b') {
+            return `<span style="font-family:Georgia,serif;color:${color};font-size:15px;vertical-align:middle;padding:0 3px">${t}</span>`;
+        }
+
+        // Builds a full formula pill as HTML string
+        function mathPill(parts) {
+            return `<span class="formula-eq">${parts.join('')}</span>`;
+        }
+
+        /* ─── FORMULA DEFINITIONS ────────────────────────────────────────────────── */
+        function getFormulas(type, sub) {
+            const c = '#2563eb';
+            // 1/f = 1/d + 1/F
+            const lensFormula = mathPill([frac('1', 'f', c), op('='), frac('1', 'd', c), op('+'), frac('1', 'F', c)]);
+
+            // Γ = F/d  (converging)  or  Γ = −F/d  (mirror)
+            const gammaLens = mathPill([sym('Γ', c), op('='), frac('F', 'd', c)]);
+            const gammaMirror = mathPill([sym('Γ', c), op('='), op('−'), frac('F', 'd', c)]);
+
+            const fPos = mathPill([sym('f', c), op('>'), sym('0', '#059669', 14)]);
+            const fNeg = mathPill([sym('f', c), op('<'), sym('0', '#dc2626', 14)]);
+
+            const labels = {
+                lens0: 'Жинақтаушы линза',
+                lens1: 'Шашыратушы линза',
+                mirror0: 'Ойыс (жинақтаушы) айна',
+                mirror1: 'Дөңес (шашыратушы) айна',
+            };
+
+            const key = type + sub;
+            const pills = type === 'lens'
+                ? [lensFormula, gammaLens, sub === 0 ? fPos : fNeg]
+                : [lensFormula, gammaMirror, sub === 0 ? fPos : fNeg];
+
+            return { note: labels[key], pills };
+        }
+
+        function updateFormula() {
+            const { note, pills } = getFormulas(currentType, currentSub);
+            const body = document.getElementById('formula-body');
+            body.innerHTML = pills.map((p, i) =>
+                p + (i < pills.length - 1 ? '<span class="formula-sep">·</span>' : '')
+            ).join('');
+            document.getElementById('formula-note').textContent = note;
+        }
+
+        /* ─── UI CONTROLS ────────────────────────────────────────────────────────── */
+        function selectType(t) {
+            currentType = t;
+            document.getElementById('card-lens').classList.toggle('active', t === 'lens');
+            document.getElementById('card-mirror').classList.toggle('active', t === 'mirror');
+            const s1 = document.getElementById('sub1');
+            const s2 = document.getElementById('sub2');
+            if (t === 'lens') {
+                s1.textContent = 'Жинақтаушы (+)';
+                s2.textContent = 'Шашыратушы (−)';
+            } else {
+                s1.textContent = 'Ойыс (Жинақтаушы)';
+                s2.textContent = 'Дөңес (Шашыратушы)';
+            }
+            updateFormula();
+            clearAll(false);
+        }
+
+        function selectSub(s) {
+            currentSub = s;
+            document.getElementById('sub1').classList.toggle('active', s === 0);
+            document.getElementById('sub2').classList.toggle('active', s === 1);
+            updateFormula();
+            clearAll(false);
+        }
+
+        function clearAll(resetCanvas = true) {
+            document.getElementById('error-msg').textContent = '';
+            document.getElementById('result-chips').innerHTML = '';
+            ['inp-d', 'inp-f', 'inp-F', 'inp-G'].forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                el.classList.remove('computed');
+            });
+            if (resetCanvas) {
+                const c = document.getElementById('canvas');
+                c.getContext('2d').clearRect(0, 0, c.width, c.height);
+            }
+        }
+
+        function val(id) {
+            const v = document.getElementById(id).value;
+            return v === '' ? null : parseFloat(v);
+        }
+
+        /* ─── SOLVE ──────────────────────────────────────────────────────────────── */
+        function solve() {
+            const errEl = document.getElementById('error-msg');
+            const chipsEl = document.getElementById('result-chips');
+            errEl.textContent = '';
+            chipsEl.innerHTML = '';
+            ['inp-d', 'inp-f', 'inp-F', 'inp-G'].forEach(id =>
+                document.getElementById(id).classList.remove('computed'));
+
+            let d = val('inp-d'), f = val('inp-f'), F = val('inp-F'), G = val('inp-G');
+            const known = [d, f, F, G].filter(v => v !== null).length;
+
+            if (known !== 2) {
+                errEl.textContent = 'Қате: дәл 2 мән енгізу керек (қалған 2 есептеледі)';
+                return;
+            }
+
+            if (f !== null) f = Math.abs(f) * (currentSub === 1 ? -1 : 1);
+
+            if (d !== null && f !== null && Math.abs(d - Math.abs(f)) < 1e-6) {
+                setChips([
+                    { l: `d = ${d.toFixed(2)} см`, c: 'chip-blue' },
+                    { l: `f = ${f.toFixed(2)} см`, c: 'chip-blue' },
+                    { l: 'Кескін шексіздікте (F → ∞)', c: 'chip-amber' }
+                ]);
+                drawScene(d, f, Infinity, 0);
+                return;
+            }
+
+            let computed = [];
+            if (d !== null && f !== null) {
+                F = 1 / (1 / f - 1 / d); G = F / d;
+                computed = ['inp-F', 'inp-G'];
+            } else if (d !== null && F !== null) {
+                f = 1 / (1 / d + 1 / F); G = F / d;
+                computed = ['inp-f', 'inp-G'];
+            } else if (f !== null && F !== null) {
+                d = 1 / (1 / f - 1 / F); G = F / d;
+                computed = ['inp-d', 'inp-G'];
+            } else if (d !== null && G !== null) {
+                F = G * d; f = 1 / (1 / d + 1 / F);
+                computed = ['inp-F', 'inp-f'];
+            } else if (f !== null && G !== null) {
+                d = f * (G + 1) / G; F = G * d;
+                computed = ['inp-d', 'inp-F'];
+            } else if (F !== null && G !== null) {
+                d = F / G; f = 1 / (1 / d + 1 / F);
+                computed = ['inp-d', 'inp-f'];
+            }
+
+            if (!isFinite(F) || !isFinite(G) || !isFinite(d) || !isFinite(f)) {
+                errEl.textContent = 'Қате: берілген мәндер физикалық мағынаға сай емес';
+                return;
+            }
+
+            const map = { 'inp-d': d, 'inp-f': f, 'inp-F': F, 'inp-G': G };
+            computed.forEach(id => {
+                document.getElementById(id).value = map[id].toFixed(2);
+                document.getElementById(id).classList.add('computed');
+            });
+
+            const imgType = F > 0 ? 'Нақты кескін' : 'Жалған кескін';
+            const orient = G < 0 ? 'Төңкерілген' : 'Тура';
+            const size = Math.abs(G) > 1 ? 'Үлкейтілген'
+                : Math.abs(G) < 1 ? 'Кішірейтілген' : 'Бірдей өлшем';
+
+            setChips([
+                { l: `d = ${d.toFixed(2)} см`, c: 'chip-blue' },
+                { l: `f = ${f.toFixed(2)} см`, c: 'chip-blue' },
+                { l: `F = ${F.toFixed(2)} см`, c: 'chip-green' },
+                { l: `Г = ${G.toFixed(2)}`, c: 'chip-amber' },
+                { l: imgType, c: F > 0 ? 'chip-green' : 'chip-red' },
+                { l: orient, c: 'chip-purple' },
+                { l: size, c: 'chip-amber' },
+            ]);
+
+            drawScene(d, f, F, G);
+        }
+
+        function setChips(arr) {
+            document.getElementById('result-chips').innerHTML =
+                arr.map(({ l, c }) => `<span class="chip ${c}">${l}</span>`).join('');
+        }
+
+        /* ─── DRAWING ────────────────────────────────────────────────────────────── */
+        function drawScene(d, f, F, G) {
+            const canvas = document.getElementById('canvas');
+            const dpr = window.devicePixelRatio || 1;
+            const cssW = canvas.offsetWidth || 860;
+            const cssH = Math.max(220, Math.min(320, cssW * 0.36));
+
+            canvas.width = cssW * dpr;
+            canvas.height = cssH * dpr;
+            canvas.style.height = cssH + 'px';
+
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, cssW, cssH);
+
+            const W = cssW, H = cssH;
+            const cx = W / 2, cy = H / 2;
+            const maxV = Math.max(Math.abs(d), Math.abs(f) * 1.5, isFinite(F) ? Math.abs(F) * 1.2 : 0, 5);
+            const s = Math.min((W / 2 - 80) / maxV, 9);
+
+            if (currentType === 'lens') drawLensScene(ctx, W, H, cx, cy, s, d, f, F, G);
+            else drawMirrorScene(ctx, W, H, cx, cy, s, d, f, F, G);
+        }
+
+        function drawLensScene(ctx, W, H, cx, cy, s, d, f, F, G) {
+            drawAxis(ctx, W, H, cx, cy);
+            drawLens(ctx, cx, cy, H);
+            drawFocal(ctx, cx + Math.abs(f) * s, cy, '+F');
+            drawFocal(ctx, cx - Math.abs(f) * s, cy, '−F');
+
+            const objH = Math.min(68, H * 0.25);
+            const objX = cx - d * s;
+            const imgX = isFinite(F) ? cx + F * s : null;
+            const imgH = isFinite(G) ? objH * Math.abs(G) : 0;
+            const imgDir = G < 0 ? -1 : 1;
+
+            if (imgX !== null) drawLensRays(ctx, cx, cy, objX, objH, imgX, f, s);
+            drawPencil(ctx, objX, cy, objH, '#059669', 'Зат');
+            if (imgX !== null && isFinite(G))
+                drawPencil(ctx, imgX, cy, imgH * imgDir, '#dc2626', 'Кескін', F < 0);
+
+            drawDistLabel(ctx, W, H, cx, cy, s, d, F);
+        }
+
+        function drawMirrorScene(ctx, W, H, cx, cy, s, d, f, F, G) {
+            drawAxis(ctx, W, H, cx, cy);
+            drawMirrorShape(ctx, cx, cy, H, currentSub === 0);
+            drawFocal(ctx, cx - Math.abs(f) * s, cy, 'F');
+
+            const objH = Math.min(68, H * 0.25);
+            const objX = cx - d * s;
+            const imgX = isFinite(F) ? cx - Math.abs(F) * s * (F < 0 ? -1 : 1) : null;
+            const imgH = isFinite(G) ? objH * Math.abs(G) : 0;
+            const imgDir = G < 0 ? -1 : 1;
+
+            if (imgX !== null) drawMirrorRays(ctx, cx, cy, objX, objH, imgX, f, s);
+            drawPencil(ctx, objX, cy, objH, '#059669', 'Зат');
+            if (imgX !== null && isFinite(G))
+                drawPencil(ctx, imgX, cy, imgH * imgDir, '#dc2626', 'Кескін', F < 0);
+
+            drawDistLabel(ctx, W, H, cx, cy, s, d, F);
+        }
+
+        function drawAxis(ctx, W, H, cx, cy) {
+            ctx.save();
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1; ctx.setLineDash([]);
+            ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(W - 20, cy); ctx.stroke();
+            ctx.fillStyle = '#94a3b8';
+            ctx.beginPath(); ctx.moveTo(W - 18, cy); ctx.lineTo(W - 28, cy - 4); ctx.lineTo(W - 28, cy + 4); ctx.fill();
+            ctx.font = '10px Outfit, sans-serif';
+            ctx.fillText('Оптикалық ось', W - 108, cy - 6);
+            ctx.restore();
+        }
+
+        function drawLens(ctx, cx, cy, H) {
+            const lh = H * 0.44;
+            const bulge = currentSub === 0 ? 22 : -22;
+            ctx.save();
+            ctx.shadowColor = '#2563eb'; ctx.shadowBlur = 14;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - lh / 2);
+            ctx.bezierCurveTo(cx + bulge, cy - lh / 4, cx + bulge, cy + lh / 4, cx, cy + lh / 2);
+            ctx.bezierCurveTo(cx - bulge, cy + lh / 4, cx - bulge, cy - lh / 4, cx, cy - lh / 2);
+            ctx.fillStyle = 'rgba(37,99,235,0.08)'; ctx.fill();
+            ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(cx, cy - lh / 2); ctx.bezierCurveTo(cx + bulge, cy - lh / 4, cx + bulge, cy + lh / 4, cx, cy + lh / 2); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(cx, cy - lh / 2); ctx.bezierCurveTo(cx - bulge, cy - lh / 4, cx - bulge, cy + lh / 4, cx, cy + lh / 2); ctx.stroke();
+            ctx.restore();
+            ctx.fillStyle = '#2563eb';
+            tri(ctx, cx, cy - lh / 2, 'up'); tri(ctx, cx, cy + lh / 2, 'down');
+            ctx.font = 'bold 12px Outfit, sans-serif'; ctx.fillText('О', cx + 6, cy - lh / 2 - 6);
+        }
+
+        function drawMirrorShape(ctx, cx, cy, H, concave) {
+            const mh = H * 0.44; const bulge = concave ? -26 : 26;
+            ctx.save();
+            ctx.shadowColor = '#64748b'; ctx.shadowBlur = 10;
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - mh / 2);
+            ctx.bezierCurveTo(cx + bulge, cy - mh / 4, cx + bulge, cy + mh / 4, cx, cy + mh / 2);
+            ctx.stroke();
+            ctx.restore();
+            ctx.font = 'bold 12px Outfit, sans-serif'; ctx.fillStyle = '#475569';
+            ctx.fillText('О', cx + 8, cy - mh / 2 - 6);
+        }
+
+        function tri(ctx, x, y, dir) {
+            ctx.beginPath();
+            if (dir === 'up') { ctx.moveTo(x, y); ctx.lineTo(x - 5, y + 9); ctx.lineTo(x + 5, y + 9); }
+            else { ctx.moveTo(x, y); ctx.lineTo(x - 5, y - 9); ctx.lineTo(x + 5, y - 9); }
+            ctx.fill();
+        }
+
+        function drawFocal(ctx, x, y, label) {
+            ctx.save(); ctx.shadowColor = '#d97706'; ctx.shadowBlur = 10;
+            ctx.fillStyle = '#d97706'; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+            ctx.font = '11px Outfit, sans-serif'; ctx.fillStyle = '#d97706';
+            ctx.fillText(label, x - 7, y + 17);
+        }
+
+        function drawPencil(ctx, x, baseY, h, color, label, dashed = false) {
+            const absH = Math.abs(h);
+            if (absH < 4) return;
+            const tipY = baseY - h;
+            const bw = Math.max(6, Math.min(10, absH * 0.12));
+
+            ctx.save();
+            if (dashed) { ctx.setLineDash([5, 4]); ctx.globalAlpha = 0.65; }
+
+            ctx.fillStyle = color + '22'; ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+            const bodyTop = Math.min(baseY, tipY) + absH * 0.14;
+            ctx.beginPath(); ctx.roundRect(x - bw / 2, bodyTop, bw, absH * 0.70, 2);
+            ctx.fill(); ctx.stroke();
+
+            ctx.fillStyle = '#fef3c7'; ctx.strokeStyle = color; ctx.lineWidth = 1;
+            ctx.beginPath();
+            if (h > 0) {
+                ctx.moveTo(x, tipY); ctx.lineTo(x - bw / 2, tipY + absH * 0.14); ctx.lineTo(x + bw / 2, tipY + absH * 0.14);
+            } else {
+                ctx.moveTo(x, tipY); ctx.lineTo(x - bw / 2, tipY - absH * 0.14); ctx.lineTo(x + bw / 2, tipY - absH * 0.14);
+            }
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+
+            ctx.fillStyle = '#fca5a5';
+            const erTop = h > 0 ? baseY - absH * 0.10 : baseY;
+            ctx.beginPath(); ctx.roundRect(x - bw / 2, erTop, bw, absH * 0.10, 2); ctx.fill();
+
+            ctx.setLineDash(dashed ? [5, 4] : []);
+            ctx.strokeStyle = color; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(x, baseY); ctx.lineTo(x, tipY); ctx.stroke();
+
+            ctx.setLineDash([]); ctx.fillStyle = color;
+            tri(ctx, x, h > 0 ? tipY : baseY, h > 0 ? 'up' : 'down');
+
+            ctx.restore();
+            ctx.setLineDash([]); ctx.globalAlpha = 1;
+            ctx.font = '12px Outfit, sans-serif'; ctx.fillStyle = color;
+            ctx.fillText(label, x + bw + 4, baseY - h / 2 + 4);
+        }
+
+        function drawLensRays(ctx, cx, cy, objX, objH, imgX, f, s) {
+            const tipY = cy - objH;
+            const fFar = cx + Math.abs(f) * s;
+            const fNear = cx - Math.abs(f) * s;
+
+            ctx.save(); ctx.setLineDash([7, 4]); ctx.lineWidth = 1.8; ctx.strokeStyle = '#f97316';
+            ctx.beginPath(); ctx.moveTo(objX, tipY); ctx.lineTo(cx, tipY);
+            if (currentSub === 0) {
+                ctx.lineTo(imgX, cy);
+                ctx.lineTo(imgX + 60, cy + (cy - tipY) * 60 / (imgX - cx || 1));
+            } else {
+                ctx.lineTo(cx + 180, tipY + ((tipY - cy) / (cx - fFar || 1)) * 180);
+            }
+            ctx.stroke(); ctx.restore();
+
+            ctx.save(); ctx.setLineDash([7, 4]); ctx.lineWidth = 1.8; ctx.strokeStyle = '#7c3aed';
+            const sc = (cy - tipY) / (cx - objX || 1);
+            ctx.beginPath(); ctx.moveTo(objX, tipY); ctx.lineTo(cx, cy);
+            ctx.lineTo(imgX + 60, cy + sc * (imgX + 60 - cx));
+            ctx.stroke(); ctx.restore();
+
+            ctx.save(); ctx.setLineDash([7, 4]); ctx.lineWidth = 1.8; ctx.strokeStyle = '#059669';
+            const s3 = (tipY - cy) / (objX - fNear || 1);
+            const yL = tipY + s3 * (cx - objX);
+            ctx.beginPath(); ctx.moveTo(objX, tipY); ctx.lineTo(cx, yL); ctx.lineTo(cx + 200, yL);
+            ctx.stroke(); ctx.restore();
+        }
+
+        function drawMirrorRays(ctx, cx, cy, objX, objH, imgX, f, s) {
+            const tipY = cy - objH;
+            const fX = cx - Math.abs(f) * s;
+
+            ctx.save(); ctx.setLineDash([7, 4]); ctx.lineWidth = 1.8;
+            ctx.strokeStyle = '#f97316';
+            ctx.beginPath(); ctx.moveTo(objX, tipY); ctx.lineTo(cx, tipY); ctx.lineTo(fX, cy);
+            if (isFinite(imgX)) {
+                const sl = (cy - tipY) / (fX - cx || 1);
+                ctx.lineTo(imgX, tipY + sl * (imgX - cx));
+            }
+            ctx.stroke();
+
+            ctx.strokeStyle = '#7c3aed';
+            const sc2 = (tipY - cy) / (objX - cx || 1);
+            const yM = cy + sc2 * (cx - objX);
+            ctx.beginPath(); ctx.moveTo(objX, tipY); ctx.lineTo(cx, yM); ctx.lineTo(objX - 60, yM + sc2 * 60);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function drawDistLabel(ctx, W, H, cx, cy, s, d, F) {
+            ctx.font = '10.5px Outfit, sans-serif';
+            ctx.fillStyle = '#94a3b8'; ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+            const dX = cx - d * s;
+            ctx.beginPath(); ctx.moveTo(dX, cy + 32); ctx.lineTo(cx, cy + 32); ctx.stroke();
+            ctx.fillText(`d = ${d.toFixed(1)} см`, dX + (cx - dX) / 2 - 22, cy + 46);
+            if (isFinite(F) && F !== 0) {
+                const FX = cx + F * s;
+                ctx.beginPath(); ctx.moveTo(cx, cy + 18); ctx.lineTo(FX, cy + 18); ctx.stroke();
+                ctx.fillText(`F = ${F.toFixed(1)} см`, cx + (FX - cx) / 2 - 22, cy + 32);
+            }
+        }
+
+        /* ─── RESIZE ─────────────────────────────────────────────────────────────── */
+        let _rt;
+        window.addEventListener('resize', () => {
+            clearTimeout(_rt);
+            _rt = setTimeout(() => {
+                if (document.getElementById('result-chips').children.length > 0) solve();
+            }, 180);
+        });
+
+        /* ─── INIT ───────────────────────────────────────────────────────────────── */
+        updateFormula();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIZIOPTIKA</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ── VARIABLES (same as main site) ─────────────────────────────────────── */
+        :root {
+            --bg: #f0f4ff;
+            --card: #ffffff;
+            --card2: #f7f9ff;
+            --border: #dde4f5;
+            --border2: #c8d3ee;
+            --primary: #2563eb;
+            --primary-lt: #dbeafe;
+            --accent: #d97706;
+            --accent-lt: #fef3c7;
+            --purple: #7c3aed;
+            --text: #0f172a;
+            --text2: #334155;
+            --muted: #64748b;
+            --muted2: #94a3b8;
+            --shadow: 0 4px 16px rgba(15, 23, 42, .08), 0 1px 4px rgba(15, 23, 42, .04);
+            --shadow-lg: 0 20px 60px rgba(15, 23, 42, .10), 0 4px 16px rgba(15, 23, 42, .06);
+            --shadow-blue: 0 6px 24px rgba(37, 99, 235, .18);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Dot-grid background — same as main site */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, #b8c8e8 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: .35;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Colour blob top-right — same as main site */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -120px;
+            right: -120px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(37, 99, 235, .10) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Second blob bottom-left */
+        .blob2 {
+            position: fixed;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(217, 119, 6, .07) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── CARD ───────────────────────────────────────────────────────────────── */
+        .title-card {
+            position: relative;
+            z-index: 1;
+            max-width: 760px;
+            width: 100%;
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 28px;
+            padding: 56px 52px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            animation: fadeUp .6s ease both;
+        }
+
+        /* Subtle top accent line */
+        .title-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--purple), var(--accent));
+            border-radius: 0 0 4px 4px;
+        }
+
+        /* ── LENS ICON ──────────────────────────────────────────────────────────── */
+        .lens-icon {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .lens-icon svg {
+            filter: drop-shadow(0 4px 12px rgba(37, 99, 235, .20));
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.04);
+            }
+        }
+
+        /* ── TITLE ──────────────────────────────────────────────────────────────── */
+        .project {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.4rem, 7vw, 3.6rem);
+            font-weight: 400;
+            letter-spacing: .06em;
+            color: var(--text);
+            margin-bottom: 10px;
+            line-height: 1.05;
+        }
+
+        .project .grad {
+            background: linear-gradient(125deg, var(--primary) 0%, var(--purple) 55%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--muted);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        /* ── DIVIDER ────────────────────────────────────────────────────────────── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 0 auto 32px;
+            max-width: 380px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent, var(--border2));
+        }
+
+        .divider-line.right {
+            background: linear-gradient(90deg, var(--border2), transparent);
+        }
+
+        .divider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            flex-shrink: 0;
+        }
+
+        /* ── DESCRIPTION ────────────────────────────────────────────────────────── */
+        .description {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--muted);
+            margin-bottom: 36px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .description b {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* ── FEATURE PILLS ──────────────────────────────────────────────────────── */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .feat-chip {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border2);
+            background: var(--card2);
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text2);
+            box-shadow: 0 1px 3px rgba(15, 23, 42, .05);
+        }
+
+        .feat-chip .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ── BUTTON ─────────────────────────────────────────────────────────────── */
+        .action-btn {
+            display: inline-block;
+            padding: 16px 48px;
+            border-radius: 50px;
+            background: linear-gradient(130deg, var(--primary) 0%, var(--purple) 100%);
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-decoration: none;
+            box-shadow: 0 6px 24px rgba(37, 99, 235, .28);
+            transition: transform .2s, box-shadow .2s, opacity .2s;
+            margin-bottom: 32px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 36px rgba(37, 99, 235, .38);
+            opacity: .94;
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ── FOOTER ─────────────────────────────────────────────────────────────── */
+        .footer {
+            font-size: 12px;
+            color: var(--muted2);
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .footer::before,
+        .footer::after {
+            content: '';
+            width: 28px;
+            height: 1px;
+            background: var(--border2);
+        }
+
+        /* ── ANIMATIONS ─────────────────────────────────────────────────────────── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
+        @media (max-width: 600px) {
+            .title-card {
+                padding: 40px 24px;
+                border-radius: 22px;
+            }
+
+            .project {
+                font-size: 2.1rem;
+            }
+
+            .tagline {
+                font-size: .9rem;
+            }
+
+            .description {
+                font-size: .95rem;
+            }
+
+            .action-btn {
+                padding: 14px 36px;
+                font-size: 14px;
+            }
+
+            .features {
+                gap: 8px;
+            }
+
+            .feat-chip {
+                font-size: 12px;
+                padding: 7px 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="blob2"></div>
+
+    <div class="title-card">
+
+        <!-- Lens SVG icon -->
+        <div class="lens-icon">
+            <svg width="72" height="90" viewBox="0 0 72 90">
+                <defs>
+                    <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#93c5fd" />
+                        <stop offset="100%" style="stop-color:#2563eb" />
+                    </linearGradient>
+                    <linearGradient id="lg2" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:.3" />
+                        <stop offset="100%" style="stop-color:#2563eb;stop-opacity:.05" />
+                    </linearGradient>
+                </defs>
+                <!-- Glow ellipse -->
+                <ellipse cx="36" cy="45" rx="26" ry="38" fill="url(#lg2)" />
+                <!-- Lens body -->
+                <ellipse cx="36" cy="45" rx="16" ry="34" fill="url(#lg)" stroke="#2563eb" stroke-width="1.8"
+                    opacity=".9" />
+                <!-- Shine -->
+                <ellipse cx="30" cy="32" rx="4" ry="8" fill="white" opacity=".25" transform="rotate(-15 30 32)" />
+                <!-- Optical axis -->
+                <line x1="36" y1="5" x2="36" y2="85" stroke="#bfdbfe" stroke-width="1" stroke-dasharray="4,4"
+                    opacity=".6" />
+                <!-- Focal point dots -->
+                <circle cx="36" cy="20" r="3" fill="#d97706" />
+                <circle cx="36" cy="70" r="3" fill="#d97706" />
+            </svg>
+        </div>
+
+        <!-- Title -->
+        <div class="project"><span class="grad">VIZIOPTIKA</span></div>
+        <div class="tagline">Оптиканы визуализация арқылы меңгеру</div>
+
+        <!-- Divider -->
+        <div class="divider">
+            <div class="divider-line"></div>
+            <div class="divider-dot"></div>
+            <div class="divider-line right"></div>
+        </div>
+
+        <!-- Description -->
+        <div class="description">
+            Физика пәнінің <b>«Оптика»</b> тарауын оқытуға арналған<br>
+            визуалды және интерактивті білім беру платформасы
+        </div>
+
+        <!-- Feature chips -->
+        <div class="features">
+            <div class="feat-chip">
+                <div class="dot" style="background:#2563eb"></div>
+                Интерактивті модель
+            </div>
+            <div class="feat-chip">
+                <div class="dot" style="background:#7c3aed"></div>
+                Линза & Айна есептегіш
+            </div>
+            <div class="feat-chip">
+                <div class="dot" style="background:#d97706"></div>
+                Сәуле диаграммалары
+            </div>
+            <div class="feat-chip">
+                <div class="dot" style="background:#059669"></div>
+                Чат-бот көмекші
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div>
+            <a href="graphic.html" class="action-btn">Платформаға өту →</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">Диссертациялық зерттеу аясында әзірленген</div>
+
+    </div>
+</body>
+
+</html>

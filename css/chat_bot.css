@@ -1,0 +1,120 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: #f5f9ff;
+}
+
+/* ===== CONTAINER ===== */
+.chat-container {
+    position: fixed;
+    inset: 0;
+    max-width: 420px;
+    margin: auto;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+.chat-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 14px;
+    background: #4f8cff;
+    color: white;
+    font-weight: 600;
+}
+
+/* ===== CHAT AREA ===== */
+.chat-box {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ===== INPUT AREA ===== */
+.chat-input {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+
+    background: #fff;
+    border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    /* ❗ iOS zoom fix */
+}
+
+.chat-input button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #4f8cff;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* ===== MESSAGES ===== */
+.bot {
+    background: #e3f2fd;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+
+.user {
+    background: #4f8cff;
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    text-align: right;
+}
+
+/* ===== BUTTONS ===== */
+.clear-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 16px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.back {
+    text-decoration: none;
+    color: white;
+    font-weight: 400;
+}
+
+.back:hover {
+
+    text-decoration: underline;
+}
